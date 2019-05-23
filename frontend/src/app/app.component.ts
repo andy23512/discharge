@@ -4,7 +4,17 @@ import { parse } from 'ansicolor';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { uniqBy, pluck, prop, sortBy, pipe } from 'ramda';
+import {
+  uniqBy,
+  pluck,
+  prop,
+  sortBy,
+  pipe,
+  split,
+  length,
+  filter,
+  map as Rmap
+} from 'ramda';
 
 interface Data {
   message: string;
@@ -17,7 +27,7 @@ interface Chunk {
 
 interface Group {
   name: string;
-  css: string;
+  css: SafeStyle;
 }
 
 interface Message {
@@ -39,17 +49,20 @@ export class AppComponent {
   constructor(private sanitizer: DomSanitizer) {
     this.socket$ = webSocket('ws://localhost:8999');
     this.messages$ = this.socket$.pipe(
-      map(data =>
-        data.message
-          .split('\n')
-          .filter(log => log.length > 0)
-          .map(rawMessage => {
+      map(
+        pipe<Data, string, string[], string[], Message[]>(
+          prop('message'),
+          split('\n'),
+          filter<string>(log => log.length > 0),
+          Rmap(rawMessage => {
             const parsedMessage = parse(rawMessage);
             const groupMatch = parsedMessage.spans[0].text.match(/^(\S+) \|$/);
             const group = groupMatch
               ? {
                   name: groupMatch[1],
-                  css: parsedMessage.spans[0].css
+                  css: this.sanitizer.bypassSecurityTrustStyle(
+                    parsedMessage.spans[0].css
+                  )
                 }
               : null;
             return {
@@ -60,12 +73,14 @@ export class AppComponent {
               }))
             };
           })
+        )
       )
     );
     this.groups$ = this.messages$.pipe(
       map(
-        pipe<Message[], Group[], Group[], Group[]>(
+        pipe<Message[], Group[], Group[], Group[], Group[]>(
           pluck('group'),
+          filter<Group>(Boolean),
           uniqBy(prop('name')),
           sortBy(prop('name'))
         )

@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <ul>
   <li *ngFor="let group of groups$ | async">
-    {{group}}
+    <span [style]="group.css">{{group.name}}</span>
   </li>
 </ul>
 <ul>
