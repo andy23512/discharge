@@ -4,6 +4,7 @@ import { parse } from 'ansicolor';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { uniqBy, pluck, prop, sortBy, pipe } from 'ramda';
 
 interface Data {
   message: string;
@@ -14,14 +15,14 @@ interface Chunk {
   text: string;
 }
 
-interface Message {
-  group: string;
-  chunks: Chunk[];
-}
-
 interface Group {
   name: string;
   css: string;
+}
+
+interface Message {
+  group: Group;
+  chunks: Chunk[];
 }
 
 @Component({
@@ -45,11 +46,14 @@ export class AppComponent {
           .map(rawMessage => {
             const parsedMessage = parse(rawMessage);
             const groupMatch = parsedMessage.spans[0].text.match(/^(\S+) \|$/);
-            const group = groupMatch ? groupMatch[1] : null;
-            const groupCss = groupMatch ? parsedMessage.spans[0].css : null;
+            const group = groupMatch
+              ? {
+                  name: groupMatch[1],
+                  css: parsedMessage.spans[0].css
+                }
+              : null;
             return {
               group,
-              groupCss,
               chunks: parsedMessage.spans.map(chunk => ({
                 ...chunk,
                 css: this.sanitizer.bypassSecurityTrustStyle(chunk.css)
@@ -59,8 +63,12 @@ export class AppComponent {
       )
     );
     this.groups$ = this.messages$.pipe(
-      map(messages =>
-        Array.from(new Set(messages.map(message => message.group))).sort()
+      map(
+        pipe<Message[], Group[], Group[], Group[]>(
+          pluck('group'),
+          uniqBy(prop('name')),
+          sortBy(prop('name'))
+        )
       )
     );
   }
