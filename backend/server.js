@@ -7,9 +7,20 @@ const app = express()
 const server = http.createServer(app)
 const wss = new ws.Server({ server })
 
-process.stdin.on('data', data => {
+let totalData = '';
+
+process.stdin.on('data', rawData => {
+  const data = rawData.toString()
+  totalData += data
   wss.clients.forEach(client => {
-    client.send(JSON.stringify({message: data.toString()}))
+    client.send(JSON.stringify({message: data}))
+  })
+})
+
+wss.on('connection', socket => {
+  socket.send(JSON.stringify({message: totalData}))
+  socket.on('error', (err) => {
+    console.warn(`Client disconnected - reason: ${err}`)
   })
 })
 
