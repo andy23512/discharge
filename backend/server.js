@@ -3,26 +3,13 @@ const http = require('http')
 const readline = require('readline')
 const ws = require('ws')
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: null,
-  terminal: false
-})
-rl.on('line', function(line){
-    console.log('line', line)
-})
-
 const app = express()
 const server = http.createServer(app)
 const wss = new ws.Server({ server })
 
-wss.on('connection', socket => {
-  socket.send({
-    message: 'nanoha'
-  })
-
-  socket.on('error', (err) => {
-    console.warn(`Client disconnected - reason: ${err}`)
+process.stdin.on('data', data => {
+  wss.clients.forEach(client => {
+    client.send(JSON.stringify({message: data.toString()}))
   })
 })
 
