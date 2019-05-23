@@ -2,19 +2,9 @@ import { Component } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { parse } from 'ansicolor';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map as streamMap } from 'rxjs/operators';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import {
-  uniqBy,
-  pluck,
-  prop,
-  sortBy,
-  pipe,
-  split,
-  length,
-  filter,
-  map as Rmap
-} from 'ramda';
+import { uniqBy, pluck, prop, sortBy, pipe, split, filter, map } from 'ramda';
 
 interface Data {
   message: string;
@@ -49,12 +39,12 @@ export class AppComponent {
   constructor(private sanitizer: DomSanitizer) {
     this.socket$ = webSocket('ws://localhost:8999');
     this.messages$ = this.socket$.pipe(
-      map(
+      streamMap(
         pipe<Data, string, string[], string[], Message[]>(
           prop('message'),
           split('\n'),
           filter<string>(log => log.length > 0),
-          Rmap(rawMessage => {
+          map(rawMessage => {
             const parsedMessage = parse(rawMessage);
             const groupMatch = parsedMessage.spans[0].text.match(/^(\S+) \|$/);
             const group = groupMatch
@@ -77,7 +67,7 @@ export class AppComponent {
       )
     );
     this.groups$ = this.messages$.pipe(
-      map(
+      streamMap(
         pipe<Message[], Group[], Group[], Group[], Group[]>(
           pluck('group'),
           filter<Group>(Boolean),
