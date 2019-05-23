@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:andy23512/docker-compose-log-viewer.git",
   "author": "Tangent Chang <andy23512@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "readline": "^1.3.0"
+  }
 }
