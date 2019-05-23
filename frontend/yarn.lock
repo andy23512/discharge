@@ -972,6 +972,11 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
+ansicolor@^1.1.84:
+  version "1.1.84"
+  resolved "https://registry.yarnpkg.com/ansicolor/-/ansicolor-1.1.84.tgz#cf2e54cde93fb09423a37cefa0645c8256af37e5"
+  integrity sha512-UVGP0KH+z+cqbLXya4ZrSAWcGqwKQOlLGx4vva4DYpI8zxolnb3uhmVxuMOc0yJM3LeLfoJrYp7+x2DVa/oerA==
+
 anymatch@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-2.0.0.tgz#bcb24b4f37934d9aa7ac17b4adaf89e7c76ef2eb"
