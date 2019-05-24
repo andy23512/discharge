@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatSidenavModule, MatListModule } from '@angular/material';
+import { NgxsModule } from '@ngxs/store';
+import { MessageState } from './state/message.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,7 +17,8 @@ import { MatSidenavModule, MatListModule } from '@angular/material';
     BrowserAnimationsModule,
     ScrollingModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    NgxsModule.forRoot([MessageState])
   ],
   providers: [],
   bootstrap: [AppComponent]
