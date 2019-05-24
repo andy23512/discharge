@@ -77,4 +77,8 @@ export class AppComponent {
       )
     );
   }
+
+  public groupName(group: Group) {
+    return group.name;
+  }
 }
