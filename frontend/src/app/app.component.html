@@ -4,8 +4,8 @@
     <span [style]="group.css">{{group.name}}</span>
   </li>
 </ul>
-<ul>
-  <li *ngFor="let message of messages$ | async">
+<cdk-virtual-scroll-viewport itemSize="10" class="message-list">
+  <div *cdkVirtualFor="let message of messages$ | async">
     <span *ngFor="let chunk of message.chunks" [style]="chunk.css">{{chunk.text}}</span>
-  </li>
-</ul>
+  </div>
+</cdk-virtual-scroll-viewport>

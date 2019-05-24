@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { parse } from 'ansicolor';
 import { Observable } from 'rxjs';
-import { map as streamMap } from 'rxjs/operators';
+import { map as streamMap, tap } from 'rxjs/operators';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { uniqBy, pluck, prop, sortBy, pipe, split, filter, map } from 'ramda';
 
@@ -46,7 +46,9 @@ export class AppComponent {
           filter<string>(log => log.length > 0),
           map(rawMessage => {
             const parsedMessage = parse(rawMessage);
-            const groupMatch = parsedMessage.spans[0].text.match(/^(\S+) \|$/);
+            const groupMatch = parsedMessage.spans[0].text.match(
+              /^(\S+)\s*\|$/
+            );
             const group = groupMatch
               ? {
                   name: groupMatch[1],
@@ -64,7 +66,8 @@ export class AppComponent {
             };
           })
         )
-      )
+      ),
+      tap(console.log)
     );
     this.groups$ = this.messages$.pipe(
       streamMap(
