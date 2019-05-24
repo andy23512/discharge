@@ -11,7 +11,7 @@
   </mat-drawer>
   <mat-drawer-content>
     <div class="message-list">
-      <div *ngFor="let message of messages$ | async">
+      <div *ngFor="let message of shownMessages$ | async">
         <span *ngFor="let chunk of message.chunks" [style]="chunk.css">{{chunk.text}}</span>
       </div>
     </div>
