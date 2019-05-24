@@ -8,6 +8,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatSidenavModule, MatListModule } from '@angular/material';
 import { NgxsModule } from '@ngxs/store';
 import { MessageState } from './state/message.state';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,8 @@ import { MessageState } from './state/message.state';
     ScrollingModule,
     MatSidenavModule,
     MatListModule,
-    NgxsModule.forRoot([MessageState])
+    NgxsModule.forRoot([MessageState]),
+    NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

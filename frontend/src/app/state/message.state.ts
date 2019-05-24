@@ -1,5 +1,5 @@
 import { State, Action, StateContext, NgxsOnInit } from '@ngxs/store';
-import { AddMessages } from './message.actions';
+import { AddMessages, SelectGroup } from './message.actions';
 import { Message, Group, MessageData } from '../message.model';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { filter, map, pipe, pluck, prop, sortBy, split, uniqBy } from 'ramda';
@@ -73,6 +73,15 @@ export class MessageState implements NgxsOnInit {
     ctx.patchState({
       messages: [...messages, ...newMessages],
       groups: sortBy(prop('name'))([...groups, ...newGroups])
+    });
+  }
+
+  @Action(SelectGroup)
+  SelectGroup(ctx: StateContext<MessageStateModel>, { group }: SelectGroup) {
+    const { selectedGroup } = ctx.getState();
+    ctx.patchState({
+      selectedGroup:
+        !selectedGroup || selectedGroup.name !== group.name ? group : null
     });
   }
 }

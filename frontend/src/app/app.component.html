@@ -2,7 +2,9 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer mode="side" opened>
     <mat-list dense>
-      <mat-list-item *ngFor="let group of groups$ | async; trackBy: groupName">
+      <mat-list-item class="group-item" *ngFor="let group of groups$ | async; trackBy: groupName"
+        (click)="selectGroup(group)"
+        [class.active]="(selectedGroup$ | async) && (selectedGroup$ | async).name === group.name">
         <span [style]="group.css">{{group.name}}</span>
       </mat-list-item>
     </mat-list>
