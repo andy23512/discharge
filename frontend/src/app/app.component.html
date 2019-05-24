@@ -1,11 +1,17 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<ul>
-  <li *ngFor="let group of groups$ | async; trackBy: groupName">
-    <span [style]="group.css">{{group.name}}</span>
-  </li>
-</ul>
-<cdk-virtual-scroll-viewport itemSize="10" class="message-list">
-  <div *cdkVirtualFor="let message of messages$ | async">
-    <span *ngFor="let chunk of message.chunks" [style]="chunk.css">{{chunk.text}}</span>
-  </div>
-</cdk-virtual-scroll-viewport>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer mode="side" opened>
+    <mat-list dense>
+      <mat-list-item *ngFor="let group of groups$ | async; trackBy: groupName">
+        <span [style]="group.css">{{group.name}}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="message-list">
+      <div *ngFor="let message of messages$ | async">
+        <span *ngFor="let chunk of message.chunks" [style]="chunk.css">{{chunk.text}}</span>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

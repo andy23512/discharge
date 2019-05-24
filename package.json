@@ -1,8 +1,8 @@
 {
-  "name": "docker-compose-log-viewer",
+  "name": "discharge",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:andy23512/docker-compose-log-viewer.git",
+  "repository": "git@github.com:andy23512/discharge.git",
   "author": "Tangent Chang <andy23512@gmail.com>",
   "license": "MIT",
   "dependencies": {

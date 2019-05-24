@@ -47,7 +47,7 @@ export class AppComponent {
           map(rawMessage => {
             const parsedMessage = parse(rawMessage);
             const groupMatch = parsedMessage.spans[0].text.match(
-              /^(\S+)\s*\|$/
+              /^(\S+)-container\s*\|$/
             );
             const group = groupMatch
               ? {
