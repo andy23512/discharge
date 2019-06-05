@@ -65,14 +65,16 @@ export class MessageState implements NgxsOnInit {
         };
       })
     )(data);
-    const newGroups = pipe<Message[], Group[], Group[], Group[]>(
+    const newGroups = pipe<Message[], Group[], Group[]>(
       pluck('group'),
-      filter<Group>(Boolean),
-      uniqBy(prop('name'))
+      filter<Group>(Boolean)
     )(newMessages);
     ctx.patchState({
       messages: [...messages, ...newMessages],
-      groups: sortBy(prop('name'))([...groups, ...newGroups])
+      groups: pipe<Group[], Group[], Group[]>(
+        uniqBy(prop('name')),
+        sortBy(prop('name'))
+      )([...groups, ...newGroups])
     });
   }
 
